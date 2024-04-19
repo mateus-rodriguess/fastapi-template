@@ -1,0 +1,11 @@
+services:
+  template_fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: template_fastapi
+    volumes:
+      - .:/app
+    restart: always
+    ports:
+      - 8000:8000
