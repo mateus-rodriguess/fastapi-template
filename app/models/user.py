@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 from typing import Optional
 
-from pydantic import EmailStr, validator
+from pydantic import EmailStr, field_validator
 from sqlmodel import AutoString, Field, SQLModel
 
 
@@ -29,7 +29,7 @@ class UserBase(SQLModel):
 
 class UserCreate(UserBase):
     password: str
-    _validate_password = validator("password", allow_reuse=True)(
+    _validate_password = field_validator("password")(
         validate_password
     )
 
@@ -38,7 +38,7 @@ class UserUpdate(UserBase):
     email: EmailStr | None = None
     password: str | None = None
     full_name: str | None = None
-    _validate_password = validator("password", allow_reuse=True)(
+    _validate_password = field_validator("password")(
         validate_password
     )
 
@@ -47,7 +47,7 @@ class UserRegister(SQLModel):
     email: EmailStr
     password: str
     full_name: str | None = None
-    _validate_password = validator("password", allow_reuse=True)(
+    _validate_password = field_validator("password")(
         validate_password
     )
 
@@ -56,7 +56,7 @@ class UpdatePassword(SQLModel):
     current_password: str
     new_password: str
 
-    _validate_password = validator("new_password", allow_reuse=True)(
+    _validate_password = field_validator("new_password")(
         validate_password
     )
 
