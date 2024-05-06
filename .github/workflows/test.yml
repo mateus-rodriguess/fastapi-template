@@ -21,9 +21,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - run: docker compose build
       - run: docker compose down -v --remove-orphans
       - run: docker compose up -d
       - name: Run tests
-        run: docker compose exec pytest
+        run: docker compose exec template_fastapi pytest
       - run: docker compose down -v --remove-orphans

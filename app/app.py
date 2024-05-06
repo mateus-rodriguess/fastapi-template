@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -25,8 +27,7 @@ DESCRIPTION_AUTH = settings.DESCRIPTION_AUTH
 
 def custom_generate_unique_id(route: APIRoute) -> str:
     return f"{route.tags[0]}-{route.name}"
-
-
+  
 app = FastAPI(
     debug=DEBUG,
     version=VERSION,
