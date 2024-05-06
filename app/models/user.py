@@ -1,4 +1,5 @@
 import re
+import uuid as uuid_pkg
 from datetime import datetime
 from typing import Optional
 
@@ -21,6 +22,12 @@ def validate_password(value: str) -> str:
 
 
 class UserBase(SQLModel):
+    uuid: uuid_pkg.UUID = Field(
+        default_factory=uuid_pkg.uuid4,
+        primary_key=True,
+        index=True,
+        nullable=False,
+    )
     email: EmailStr = Field(unique=True, index=True, sa_type=AutoString)
     is_active: bool = True
     is_superuser: bool = False
@@ -62,13 +69,13 @@ class UpdatePassword(SQLModel):
 
 
 class UserPublic(UserBase):
-    id: int
+    uuid: uuid_pkg.UUID
     created_at: datetime
     updated_at: datetime
 
 
 class TokenPayload(SQLModel):
-    sub: int | None = None
+    sub: uuid_pkg.UUID | None = None
 
 
 class TokenResponse(SQLModel):
@@ -82,7 +89,6 @@ class Message(SQLModel):
 
 
 class User(UserBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
     password: str
     created_at: datetime = Field(default_factory=datetime.now, nullable=False)
     updated_at: Optional[datetime] = Field(
@@ -93,6 +99,6 @@ class User(UserBase, table=True):
 
 
 class UserAllowedFilters(SQLModel):
-    id: Optional[int] = None
+    uuid: Optional[uuid_pkg.UUID] = None
     sort_by: Optional[str] = "created_at"
     full_name: Optional[str] = None

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import HTTPException, status
 from fastapi_pagination.ext.sqlmodel import paginate
 from sqlmodel import Session, select
@@ -56,10 +58,12 @@ class UserRepository:
         return session_user.first()
 
     @classmethod
-    async def get_user_by_id(
-        self, session: Session, id: int
+    async def get_user_by_uuid(
+        self, session: Session, uuid: UUID
     ) -> UserPublic | None:
-        session_user = await session.exec(select(User).where(User.id == id))
+        session_user = await session.exec(
+            select(User).where(User.uuid == uuid)
+        )
         return session_user.first()
 
     @classmethod
@@ -85,10 +89,12 @@ class UserRepository:
         return db_user
 
     @classmethod
-    async def delete_user(self, session: Session, id: int) -> Message:
-        user = await session.get(User, id)
+    async def delete_user(self, session: Session, uuid: UUID) -> Message:
+        user = await session.get(User, uuid)
         if not user:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found.")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found."
+            )
 
         session.delete(user)
         await session.commit()

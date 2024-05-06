@@ -40,6 +40,7 @@ class BearerTokenAuthBackend(AuthenticationBackend):
             )
         except (ValueError, UnicodeDecodeError, JWTError) as error:
             raise AuthenticationError("Invalid JWT Token.")
+        
         async_session = AsyncSession(
             engine, expire_on_commit=False, autoflush=False
         )
