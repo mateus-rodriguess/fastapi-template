@@ -1,5 +1,5 @@
 import os
-from functools import lru_cache
+from functools import cache
 from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     FIRST_FULL_NAME: str = "admin"
 
 
-@lru_cache()
+@cache
 def get_settings() -> Settings:
     """
     ## Example

@@ -120,6 +120,9 @@ def read_user_me(current_user: CurrentUser) -> Any:
     response_model=Message,
 )
 async def delete_user(
-    *, id: int, session: Session = Depends(get_session)
+    *, id: int,current_user: CurrentUser, session: Session = Depends(get_session)
 ) -> Message:
+    
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Operation not permitted.")
     return await UserRepository.delete_user(session, id)
