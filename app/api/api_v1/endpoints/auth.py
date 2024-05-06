@@ -43,7 +43,7 @@ async def login_access_token(
     )
     return TokenResponse(
         access_token=security.create_access_token(
-            user.id, expires_delta=access_token_expires
+            user.uuid, expires_delta=access_token_expires
         )
     )
 
@@ -75,7 +75,7 @@ async def refresh_access_token(
 
     return TokenResponse(
         access_token=security.create_access_token(
-            current_user.id, access_token_expires
+            current_user.uuid, access_token_expires
         ),
         token_type="Bearer",
     )

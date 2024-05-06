@@ -1,4 +1,5 @@
 from typing import Any
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
@@ -48,14 +49,14 @@ async def get_users(
 
 
 @router.get(
-    path="/users/{id:int}",
+    path="/users/{uuid:str}",
     status_code=status.HTTP_200_OK,
     response_model=UserPublic,
 )
 async def get_user(
-    *, id: int, session: Session = Depends(get_session)
+    *, uuid: UUID, session: Session = Depends(get_session)
 ) -> dict:
-    data = await UserRepository.get_user_by_id(session, id)
+    data = await UserRepository.get_user_by_uuid(session, uuid)
     if not data:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Not found."
@@ -78,7 +79,7 @@ async def update_user_me(
         existing_user = await UserRepository.get_user_by_email(
             session=session, email=user_in.email
         )
-        if existing_user and existing_user.id != current_user.id:
+        if existing_user and existing_user.uuid != current_user.uuid:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="User with this email already exists.",
@@ -115,14 +116,11 @@ def read_user_me(current_user: CurrentUser) -> Any:
 
 
 @router.delete(
-    path="/users/{id:int}",
+    path="/users/{uuid:str}",
     status_code=status.HTTP_200_OK,
     response_model=Message,
 )
 async def delete_user(
-    *, id: int,current_user: CurrentUser, session: Session = Depends(get_session)
+    *, uuid: UUID, session: Session = Depends(get_session)
 ) -> Message:
-    
-    if not current_user.is_superuser:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Operation not permitted.")
-    return await UserRepository.delete_user(session, id)
+    return await UserRepository.delete_user(session, uuid)
