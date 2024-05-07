@@ -96,6 +96,6 @@ class UserRepository:
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found."
             )
 
-        session.delete(user)
+        await session.delete(user)
         await session.commit()
         return Message(detail="User deleted successfully.")

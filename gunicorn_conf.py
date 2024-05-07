@@ -75,4 +75,3 @@ log_data = {
 }
 
 logger.info(json.dumps(obj=log_data, indent=4))
-

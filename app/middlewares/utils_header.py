@@ -9,5 +9,5 @@ async def header_utils(request: Request, call_next):
     process_time = time.time() - start_time
     response.headers["X-Process-Time"] = str(process_time)
     response.headers["user-agent"] = request.headers["user-agent"]
-    
+
     return response

@@ -1,5 +1,5 @@
 import pytest
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import Session, delete
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -21,17 +21,21 @@ def anyio_backend():
 
 @pytest.fixture(scope="session", autouse=True)
 async def session() -> AsyncSession:  # type: ignore
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False, autoflush=False)
+    async_session = sessionmaker(
+        engine, class_=AsyncSession, expire_on_commit=False, autoflush=False
+    )
     async with async_session() as session:
         await init_db()
         yield session
         statement = delete(User)
         await session.exec(statement)
         await session.commit()
-        
+
+
 @pytest.fixture(scope="session")
 async def client():
-    async with AsyncClient(app=app, base_url="http://0.0.0.0") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://0.0.0.0"
+                           ) as client:
         yield client
 
 

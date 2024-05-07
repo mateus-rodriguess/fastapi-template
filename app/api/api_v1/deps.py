@@ -33,7 +33,6 @@ async def get_session() -> AsyncSession:  # type: ignore
         yield session
 
 
-
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
