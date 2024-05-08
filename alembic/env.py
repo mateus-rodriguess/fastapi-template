@@ -13,7 +13,7 @@ from app.models.user import User
 
 settings = get_settings()
 
-DATABASE_URI = settings.DATABASE_URI  # sqlalchemy.url
+DATABASE_URI = settings.DATABASE_URI
 
 
 config = context.config
@@ -37,7 +37,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = DATABASE_URI  # config.get_main_option("sqlalchemy.url")
+    url = DATABASE_URI
 
     context.configure(
         url=url,
@@ -65,8 +65,8 @@ async def run_async_migrations() -> None:
 
     """
     config_section = config.get_section(config.config_ini_section)
-    # config.get_main_option("sqlalchemy.url")
     config_section["sqlalchemy.url"] = DATABASE_URI
+    
     connectable = AsyncEngine(
         engine_from_config(
             config_section,

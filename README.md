@@ -17,12 +17,13 @@
 The `FastAPI` template is a template repository for microservices. In this template, you will find examples of how to build a robust application with FastAPI.
 
 ## Technology Stack and Features
+
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
+
   - 🚀 Fast: Supports async/await syntax for routes and database connection.
   - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
   - 💪 Robust: Get production-ready code with automatic interactive documentation.
   - 🔐 Security: `OAuth2` with `fastapi.security`
-
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - ✅ [pytest](https://docs.pytest.org/en/8.0.x/) Unitary tests.
 - 🧰 [alembic](https://alembic.sqlalchemy.org/en/latest/) Database migrations.
@@ -31,14 +32,14 @@ The `FastAPI` template is a template repository for microservices. In this templ
 - 🚢 Deployment instructions using Docker Compose.
 - 📑 Color logger translator with `guvicorn-logger`.
 - 📑 Pagination: `fastapi-pagination` to simplify pagination.
-
+- 👀 pylint: Pylint analyses your code without actually running it.
 
 ### Interactive API Documentation
+
   Get production-ready code with automatic interactive documentation.
   API documentation at [Docs](http://127.0.0.1:8000/docs)
 
   [![API docs](img/docs.png)](https://github.com/mateus-rodriguess/fastapi-back-end-template)
-
 
 ## How To Use It
 
@@ -58,25 +59,21 @@ But you can do the following:
   ```bash
   git clone git@github.com:mateus-rodriguess/fastapi-back-end-template.git my-back-end
   ```
-
 - Enter into the new directory:
 
   ```bash
   cd my-back-end
   ```
-
 - Set the new origin to your new repository, copy it from the GitHub interface, for example:
 
   ```bash
   git remote set-url origin git@github.com:mateus-rodriguess/fastapi-back-end-template.git
   ```
-
 - Add this repo as another "remote" to allow you to get updates later:
 
   ```bash
   git remote add upstream git@github.com:mateus-rodriguess/fastapi-back-end-template.git
   ```
-
 - Push the code to your new repository:
 
   ```bash
@@ -85,13 +82,13 @@ But you can do the following:
 
 ## Migrations
 
-  ```bash
+```bash
   # Create a model in app/models
   # Create a migration file
   $ alembic revision --autogenerate -m "Migration message."
   $ alembic upgrade head
 
-  ```
+```
 
 ## License
 

@@ -14,6 +14,7 @@ RUN apt update && \
 
 COPY . /app
 
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN pip install pipenv
+RUN pipenv install
 
 CMD [ "sh", "./start.sh" ]

@@ -1,3 +1,10 @@
+"""
+This module defines the configuration for running your application using Gunicorn, 
+a popular WSGI server.
+
+It specifies settings like worker threads, binding address, and logging options.
+"""
+
 import json
 import logging
 import multiprocessing
@@ -8,10 +15,10 @@ logger = logging.getLogger(__name__)
 
 workers_per_core_str = os.getenv("WORKERS_PER_CORE", "1")
 max_workers_str = os.getenv("MAX_WORKERS")
-use_max_workers = None
+USE_MAX_WORKERS = None
 
 if max_workers_str:
-    use_max_workers = int(max_workers_str)
+    USE_MAX_WORKERS = int(max_workers_str)
 web_concurrency_str = os.getenv("WEB_CONCURRENCY", None)
 
 host = os.getenv("HOST", "0.0.0.0")
@@ -33,8 +40,8 @@ if web_concurrency_str:
     assert web_concurrency > 0
 else:
     web_concurrency = max(int(default_web_concurrency), 2)
-    if use_max_workers:
-        web_concurrency = min(web_concurrency, use_max_workers)
+    if USE_MAX_WORKERS:
+        web_concurrency = min(web_concurrency, USE_MAX_WORKERS)
 
 accesslog_var = os.getenv("ACCESS_LOG", "-")
 use_accesslog = accesslog_var or None
@@ -69,9 +76,9 @@ log_data = {
     "accesslog": accesslog,
     # Additional, non-gunicorn variables
     "workers_per_core": workers_per_core,
-    "use_max_workers": use_max_workers,
+    "use_max_workers": USE_MAX_WORKERS,
     "host": host,
     "port": port,
 }
 
-logger.info(json.dumps(obj=log_data, indent=4))
+logger.info(json.dumps(obj=log_data, indent=4, ensure_ascii=False))
