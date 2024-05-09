@@ -8,8 +8,14 @@ from app.api.api_v1.deps import CurrentUser, get_session
 from app.api.api_v1.service.filters_user import filters_query
 from app.core.security import verify_password
 from app.db.repositories.user import UserRepository
-from app.models.user import (Message, UpdatePassword, UserAllowedFilters,
-                             UserPublic, UserRegister, UserUpdate)
+from app.models.user import (
+    Message,
+    UpdatePassword,
+    UserAllowedFilters,
+    UserPublic,
+    UserRegister,
+    UserUpdate,
+)
 from app.utils.custom_pagination import PageParams
 
 router = APIRouter()

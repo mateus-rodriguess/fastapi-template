@@ -1,17 +1,20 @@
 import os
+import secrets
 from functools import cache
-from typing import Literal
+from typing import Annotated, Any, Literal
 
+from pydantic import AnyUrl, BeforeValidator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 description = """
-    Template for FastAPI application. 
-    Nested template, contains examples of how to create a robust application with FastAPI. 
-    This API already contains authentication.
+    Template for FastAPI application.
+    Nested template, contains examples of how to create a robust
+    application with FastAPI. This API already contains authentication.
 """
 
 description_auth = """
-    Function for route authentication. In this example, the routes are authenticated by AUTH EXEMPLE, with JWT token.
+    Function for route authentication. In this example, the routes are
+    authenticated by AUTH EXEMPLE, with JWT token.
 """
 
 ENV = os.getenv("ENV")
@@ -20,6 +23,14 @@ if ENV in ["local", "staging", "production"]:
     ...
 else:
     ENV = "local"
+
+
+def parse_cors(value: Any) -> list[str] | str:
+    if isinstance(value, str) and not value.startswith("["):
+        return [i.strip() for i in value.split(",")]
+    if isinstance(value, list | str):
+        return value
+    raise ValueError(value)
 
 
 class Settings(BaseSettings):
@@ -35,23 +46,20 @@ class Settings(BaseSettings):
     VERSION: str = "0.0.1"
     API_V1_STR: str = "/api/v1"
     ENVIRONMENT: Literal["local", "staging", "production"] = ENV
-    DEBUG: bool = True if ENVIRONMENT == "local" else False
+    DEBUG: bool = ENVIRONMENT == "local"
     DESCRIPTION: str = description
     DESCRIPTION_AUTH: str = description_auth
 
+    BASE_URL: str = "http://0.0.0.0"
+    URL_ACCESS_TOKEN: str = f"{API_V1_STR}/login/access-token"
     DOMAIN: str = "localhost"
-    # insecure secret key
-    SECRET_KEY: str = (
-        "VJHBINoirmJleHAiOjE3MTM1MzQwNzUsInN1UbEElqmZD1fHd6zn5jn54jbn5j4"
-    )
+    BACKEND_CORS_ORIGINS: Annotated[
+        list[AnyUrl] | str, BeforeValidator(parse_cors)
+    ] = []
+    SECRET_KEY: str = secrets.token_urlsafe(32)
     JWT_ALGORITHM: str = "HS256"
-    # insecure secret key
-    JWT_SECRET: str = (
-        "eyJleHAiOjE3MTM1MzQwNzUsInN1YiI6IjEifQ.ZUbE-ElqmZD1fHd6zn5-PxxIdcvIhfqxybZPuRkCse0"
-    )
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = (
-        60 * 24 * 10
-    )  # 60 minutes * 24 hours * 8 days = 10 days
+    JWT_SECRET: str = secrets.token_urlsafe(32)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10 * 24 * 60  # 10 days
 
     DATABASE_URI: str = "sqlite+aiosqlite:///./sql_app.db"
 

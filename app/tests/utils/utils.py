@@ -13,7 +13,8 @@ def random_email() -> str:
 
 
 def random_password() -> str:
-    return ''.join([random.choice(string.ascii_letters + string.digits + string.punctuation) for n in range(12)])
+    choice = string.ascii_letters + string.digits + string.punctuation
+    return "".join([random.choice(choice) for n in range(12)])
 
 
 def random_lower_string() -> str:
@@ -23,9 +24,10 @@ def random_lower_string() -> str:
 async def get_superuser_token_headers(client: AsyncClient) -> dict[str, str]:
     data = {
         "email": settings.FIRST_SUPERUSER,
-        "password": settings.FIRST_SUPERUSER_PASSWORD
+        "password": settings.FIRST_SUPERUSER_PASSWORD,
     }
 
-    response = await client.post(f"{settings.API_V1_STR}/login/acess-token", json=data).json()
-
-    return {"Authorization": f"Bearer {response.get("access_token")}"}
+    response = await client.post(f"{settings.URL_ACCESS_TOKEN}", json=data)
+    data: dict = response.json()
+    access_token: str | None = data.get("access_token", None)
+    return {"Authorization": f"Bearer {access_token}"}

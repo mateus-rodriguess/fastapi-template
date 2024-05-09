@@ -29,4 +29,6 @@ async def init_db() -> Any:
                 is_superuser=True,
                 full_name=settings.FIRST_FULL_NAME,
             )
-            return await UserRepository.create_user(session=session, user_create=user_in)
+            return await UserRepository.create_user(
+                session=session, user_create=user_in
+            )

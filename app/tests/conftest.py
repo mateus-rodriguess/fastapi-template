@@ -34,8 +34,9 @@ async def session() -> AsyncSession:  # type: ignore
 
 @pytest.fixture(scope="session")
 async def client():
-    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://0.0.0.0"
-                           ) as client:
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://0.0.0.0"
+    ) as client:
         yield client
 
 
