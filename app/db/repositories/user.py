@@ -13,14 +13,14 @@ class UserRepository:
 
     @classmethod
     async def get_all_users(
-        self, session: Session, sort_by: str = "created_at", filters: dict = {}
+        cls, session: Session, sort_by: str = "created_at", filters: dict = ""
     ) -> PageParams[UserPublic]:
         return await paginate(
             session, select(User).filter_by(**filters).order_by(sort_by)
         )
 
     @classmethod
-    async def create_user(self, session: Session, user_create: dict):
+    async def create_user(cls, session: Session, user_create: dict):
         db_obj = User.model_validate(
             user_create,
             update={"password": get_password_hash(user_create.password)},
@@ -32,7 +32,7 @@ class UserRepository:
 
     @classmethod
     async def update_user_me(
-        self, session: Session, current_user: User, user_in: UserUpdate
+        cls, session: Session, current_user: User, user_in: UserUpdate
     ) -> UserPublic:
 
         user_data = user_in.model_dump(exclude_unset=True)
@@ -50,7 +50,7 @@ class UserRepository:
 
     @classmethod
     async def get_user_by_email(
-        self, session: Session, email: str
+        cls, session: Session, email: str
     ) -> UserPublic | None:
         session_user = await session.exec(
             select(User).where(User.email == email)
@@ -59,7 +59,7 @@ class UserRepository:
 
     @classmethod
     async def get_user_by_uuid(
-        self, session: Session, uuid: UUID
+        cls, session: Session, uuid: UUID
     ) -> UserPublic | None:
         session_user = await session.exec(
             select(User).where(User.uuid == uuid)
@@ -68,7 +68,7 @@ class UserRepository:
 
     @classmethod
     async def update_password_me(
-        self, session: Session, current_user: User, password: str
+        cls, session: Session, current_user: User, password: str
     ) -> Message:
         hashed_password = get_password_hash(password)
         current_user.password = hashed_password
@@ -78,9 +78,9 @@ class UserRepository:
 
     @classmethod
     async def authenticate(
-        self, session: Session, email: str, password: str
+        cls, session: Session, email: str, password: str
     ) -> UserPublic | None:
-        db_user = await self.get_user_by_email(session=session, email=email)
+        db_user = await cls.get_user_by_email(session=session, email=email)
 
         if not db_user:
             return None
@@ -89,7 +89,7 @@ class UserRepository:
         return db_user
 
     @classmethod
-    async def delete_user(self, session: Session, uuid: UUID) -> Message:
+    async def delete_user(cls, session: Session, uuid: UUID) -> Message:
         user = await session.get(User, uuid)
         if not user:
             raise HTTPException(

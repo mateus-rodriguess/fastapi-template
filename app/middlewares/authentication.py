@@ -1,8 +1,11 @@
 from fastapi import status
 from jose import JWTError, jwt
 from sqlmodel.ext.asyncio.session import AsyncSession
-from starlette.authentication import (AuthCredentials, AuthenticationBackend,
-                                      AuthenticationError)
+from starlette.authentication import (
+    AuthCredentials,
+    AuthenticationBackend,
+    AuthenticationError,
+)
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -13,7 +16,7 @@ from app.models.user import User
 settings = get_settings()
 
 
-def on_auth_error(request: Request, exc: Exception):
+def on_auth_error(_: Request, exc: Exception):
     status_code = status.HTTP_401_UNAUTHORIZED
     if len(exc.args) > 1:
         status_code = exc.args[1]
@@ -22,11 +25,11 @@ def on_auth_error(request: Request, exc: Exception):
 
 class BearerTokenAuthBackend(AuthenticationBackend):
 
-    async def authenticate(self, request):
-        if "Authorization" not in request.headers:
+    async def authenticate(self, conn):
+        if "Authorization" not in conn.headers:
             return
 
-        auth: str = request.headers["Authorization"]
+        auth: str = conn.headers["Authorization"]
 
         try:
             scheme, token = auth.split()
@@ -38,8 +41,8 @@ class BearerTokenAuthBackend(AuthenticationBackend):
                 key=settings.JWT_SECRET,
                 algorithms=[settings.JWT_ALGORITHM],
             )
-        except (ValueError, UnicodeDecodeError, JWTError) as error:
-            raise AuthenticationError("Invalid JWT Token.")
+        except (ValueError, UnicodeDecodeError, JWTError) as exeption:
+            raise AuthenticationError("Invalid JWT Token.") from exeption
 
         async_session = AsyncSession(
             engine, expire_on_commit=False, autoflush=False

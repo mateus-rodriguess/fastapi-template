@@ -1,8 +1,10 @@
 """
-    This function initializes the data for the application. It connects to the bank
-    data and checks if the initial data is already configured. If not,
-    creates the initial data.
+    This function initializes the data for the application.
+    It connects to the bank data and checks if the initial
+    data is already
+    configured. If not, creates the initial data.
 """
+
 import asyncio
 
 from app.db.connection import init_db

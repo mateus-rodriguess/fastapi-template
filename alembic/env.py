@@ -8,6 +8,7 @@ from sqlmodel import SQLModel  # Models managers
 
 from alembic import context
 from app.core.settings import get_settings  # ENVs settings
+
 # Model imports
 from app.models.user import User
 
@@ -54,8 +55,9 @@ def do_run_migrations(connection: Connection) -> None:
     context.configure(connection=connection, target_metadata=target_metadata)
 
     with context.begin_transaction():
-        context.configure(connection=connection,
-                          target_metadata=target_metadata)
+        context.configure(
+            connection=connection, target_metadata=target_metadata
+        )
         context.run_migrations()
 
 
@@ -66,7 +68,7 @@ async def run_async_migrations() -> None:
     """
     config_section = config.get_section(config.config_ini_section)
     config_section["sqlalchemy.url"] = DATABASE_URI
-    
+
     connectable = AsyncEngine(
         engine_from_config(
             config_section,

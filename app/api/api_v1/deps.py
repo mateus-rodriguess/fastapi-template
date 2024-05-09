@@ -42,11 +42,11 @@ async def get_current_user(session: SessionDep, token: TokenDep) -> User:
             token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM]
         )
         token_data = TokenPayload(**payload)
-    except (JWTError, ValidationError):
+    except (JWTError, ValidationError) as exception:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials.",
-        )
+        ) from exception
     user = await session.get(User, token_data.sub)
 
     if not user:

@@ -1,17 +1,15 @@
 """
-This module defines the configuration for running your application using Gunicorn, 
-a popular WSGI server.
-
-It specifies settings like worker threads, binding address, and logging options.
+This module defines the configuration for running your application using
+Gunicorn, a popular WSGI server.
+It specifies settings like worker threads, binding address,
+and logging options.
 """
 
 import json
-import logging
 import multiprocessing
 import os
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from app.utils.logger import logger
 
 workers_per_core_str = os.getenv("WORKERS_PER_CORE", "1")
 max_workers_str = os.getenv("MAX_WORKERS")

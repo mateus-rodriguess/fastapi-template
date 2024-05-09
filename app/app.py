@@ -1,4 +1,3 @@
-
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -9,12 +8,15 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.api.api_v1.api import api_router
 from app.core.settings import get_settings
-from app.middlewares.authentication import (BearerTokenAuthBackend,
-                                            on_auth_error)
+from app.middlewares.authentication import (
+    BearerTokenAuthBackend,
+    on_auth_error,
+)
 from app.middlewares.exception_handler import (
-    ExceptionHandlerMiddleware, validate_error_exception_handler)
+    ExceptionHandlerMiddleware,
+    validate_error_exception_handler,
+)
 from app.middlewares.utils_header import header_utils
-
 
 settings = get_settings()
 
@@ -23,6 +25,7 @@ VERSION = settings.VERSION
 DEBUG = settings.DEBUG
 DESCRIPTION = settings.DESCRIPTION
 DESCRIPTION_AUTH = settings.DESCRIPTION_AUTH
+BACKEND_CORS_ORIGINS = settings.BACKEND_CORS_ORIGINS
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
@@ -34,14 +37,13 @@ app = FastAPI(
     version=VERSION,
     title=APP_NAME,
     description=DESCRIPTION,
-    openapi_url=f"/openapi.json",
+    openapi_url="/openapi.json",
     generate_unique_id_function=custom_generate_unique_id,
 )
 
-origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[str(origin).strip("/") for origin in BACKEND_CORS_ORIGINS],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

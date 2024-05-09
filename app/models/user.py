@@ -36,36 +36,28 @@ class UserBase(SQLModel):
 
 class UserCreate(UserBase):
     password: str
-    _validate_password = field_validator("password")(
-        validate_password
-    )
+    _validate_password = field_validator("password")(validate_password)
 
 
 class UserUpdate(UserBase):
     email: EmailStr | None = None
     password: str | None = None
     full_name: str | None = None
-    _validate_password = field_validator("password")(
-        validate_password
-    )
+    _validate_password = field_validator("password")(validate_password)
 
 
 class UserRegister(SQLModel):
     email: EmailStr
     password: str
     full_name: str | None = None
-    _validate_password = field_validator("password")(
-        validate_password
-    )
+    _validate_password = field_validator("password")(validate_password)
 
 
 class UpdatePassword(SQLModel):
     current_password: str
     new_password: str
 
-    _validate_password = field_validator("new_password")(
-        validate_password
-    )
+    _validate_password = field_validator("new_password")(validate_password)
 
 
 class UserPublic(UserBase):
