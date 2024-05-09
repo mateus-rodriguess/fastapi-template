@@ -31,7 +31,7 @@ class Settings(BaseSettings):
         env_file_encoding=" 'utf-8'",
     )
 
-    APP_NAME: str = "FastAPI Back-End Template."
+    APP_NAME: str = "FastAPI Back-End Template"
     VERSION: str = "0.0.1"
     API_V1_STR: str = "/api/v1"
     ENVIRONMENT: Literal["local", "staging", "production"] = ENV

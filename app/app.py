@@ -1,4 +1,3 @@
-from contextlib import asynccontextmanager
 
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI
@@ -15,6 +14,7 @@ from app.middlewares.authentication import (BearerTokenAuthBackend,
 from app.middlewares.exception_handler import (
     ExceptionHandlerMiddleware, validate_error_exception_handler)
 from app.middlewares.utils_header import header_utils
+
 
 settings = get_settings()
 

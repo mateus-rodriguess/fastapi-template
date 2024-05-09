@@ -19,7 +19,6 @@ async def test_user_create(client: AsyncClient) -> None:
     assert data["uuid"]
     assert data["email"]
     assert data["full_name"]
-
     assert data["is_active"] == True
     assert data["is_superuser"] == False
 
