@@ -14,26 +14,28 @@
   </a>
 </p>
 
-The `FastAPI` template is a template repository for microservices. In this template, you will find examples of how to build a robust application with FastAPI.
+<hr>
+The Fastapi template is a repository for microservices. In this template, you will find examples of how to build a robust application with FastAPI.
 
 ## Technology Stack and Features
 
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
   - 🚀 Fast: Supports async/await syntax for routes and database connection.
-  - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
   - 💪 Robust: Get production-ready code with automatic interactive documentation.
   - 🔐 Security: `OAuth2` with `fastapi.security`
-
-- 🐋 [Docker Compose](https://www.docker.com) for development and production.
-- ✅ [pytest](https://docs.pytest.org/en/8.0.x/) Unitary tests.
-- 🧰 [alembic](https://alembic.sqlalchemy.org/en/latest/) Database migrations.
-- 🔒 Secure password hashing by default.
-- 🔑 JWT token authentication.
-- 📑 [guvicorn-logger](https://docs.gunicorn.org/en/stable/settings.html) Color logger translator.
-- 📑 [Pagination](https://uriyyo-fastapi-pagination.netlify.app/) to simplify pagination.
-- 👀 [Pylint](https://pylint.org/) analyses your code without actually running it.
-- 🚀 [fastapi-cache](https://github.com/long2ice/fastapi-cache) Cache using [redis](https://redis.io/).
-- 🔒 [fastapi-limiter](https://github.com/long2ice/fastapi-limiter) is a rate limiting tool for fastapi routes.
+- ⚡ Template
+  - 🧰 [SQLModel](https://sqlmodel.tiangolo.com): For the Python SQL database interactions (ORM).
+  - 🐋 [Docker Compose](https://www.docker.com): For development and production.
+  - ✅ [pytest](https://docs.pytest.org/en/8.0.x/): Unitary tests.
+  - 🧰 [alembic](https://alembic.sqlalchemy.org/en/latest/): Database migrations.
+  - 📑 [guvicorn-logger](https://docs.gunicorn.org/en/stable/settings.html): Color logger translator.
+  - 📑 [Pagination](https://uriyyo-fastapi-pagination.netlify.app/): To simplify pagination.
+  - 👀 [Pylint](https://pylint.org/): Analyses your code without actually running it.
+  - 🚀 [fastapi-cache](https://github.com/long2ice/fastapi-cache): Cache using [redis](https://redis.io/).
+  - 🔒 [fastapi-limiter](https://github.com/long2ice/fastapi-limiter): Is a rate limiting tool for fastapi routes.
+  - 🔒 Secure password hashing by default.
+  - 🔑 JWT token authentication.
+<hr>
 
 ### Interactive API Documentation
 
