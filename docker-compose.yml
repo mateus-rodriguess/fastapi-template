@@ -9,3 +9,13 @@ services:
     restart: always
     ports:
       - 8000:8000
+    env_file: .env
+
+  redis-cache:
+    image: redis:alpine
+    hostname: redis-cache
+    container_name: redis-cache
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --maxclients 1000 --requirepass insecure!secret@KEY

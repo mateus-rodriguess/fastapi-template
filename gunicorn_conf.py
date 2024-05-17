@@ -6,10 +6,9 @@ and logging options.
 """
 
 import json
+import logging as logger
 import multiprocessing
 import os
-
-from app.utils.logger import logger
 
 workers_per_core_str = os.getenv("WORKERS_PER_CORE", "1")
 max_workers_str = os.getenv("MAX_WORKERS")
@@ -61,7 +60,6 @@ graceful_timeout = int(graceful_timeout_str)
 timeout = int(timeout_str)
 keepalive = int(keepalive_str)
 
-# For debugging and testing
 log_data = {
     "loglevel": loglevel,
     "worker_class": worker_class,
@@ -72,7 +70,6 @@ log_data = {
     "keepalive": keepalive,
     "errorlog": errorlog,
     "accesslog": accesslog,
-    # Additional, non-gunicorn variables
     "workers_per_core": workers_per_core,
     "use_max_workers": USE_MAX_WORKERS,
     "host": host,

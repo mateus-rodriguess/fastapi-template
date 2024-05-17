@@ -1,12 +1,12 @@
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from fastapi.routing import APIRoute
 from fastapi_pagination import add_pagination
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.api_v1.api import api_router
+from app.api.api_v1.deps import lifespan
 from app.core.settings import get_settings
 from app.middlewares.authentication import (
     BearerTokenAuthBackend,
@@ -17,6 +17,7 @@ from app.middlewares.exception_handler import (
     validate_error_exception_handler,
 )
 from app.middlewares.utils_header import header_utils
+from app.utils.indentifier import custom_generate_unique_id
 
 settings = get_settings()
 
@@ -28,10 +29,6 @@ DESCRIPTION_AUTH = settings.DESCRIPTION_AUTH
 BACKEND_CORS_ORIGINS = settings.BACKEND_CORS_ORIGINS
 
 
-def custom_generate_unique_id(route: APIRoute) -> str:
-    return f"{route.tags[0]}-{route.name}"
-
-
 app = FastAPI(
     debug=DEBUG,
     version=VERSION,
@@ -39,6 +36,7 @@ app = FastAPI(
     description=DESCRIPTION,
     openapi_url="/openapi.json",
     generate_unique_id_function=custom_generate_unique_id,
+    lifespan=lifespan,
 )
 
 app.add_middleware(

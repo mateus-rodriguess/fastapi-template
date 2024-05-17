@@ -3,8 +3,8 @@ import logging
 import pytest
 
 import gunicorn_conf
-import initial_data
 import main
+from initial_data import init_data
 
 
 @pytest.mark.anyio
@@ -25,6 +25,6 @@ def test_gunicorn_conf():
 @pytest.mark.anyio
 async def test_initial_data():
     try:
-        await initial_data.init_data()
+        await init_data()
     except Exception as error:
         logging.error(error)

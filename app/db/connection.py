@@ -6,8 +6,8 @@ from sqlmodel import create_engine, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.settings import get_settings
-from app.db.repositories.user import UserRepository
-from app.models.user import User, UserCreate
+from app.db.repositories.users import UserRepository
+from app.models.users import UserCreate, Users
 
 settings = get_settings()
 
@@ -20,7 +20,7 @@ async def init_db() -> Any:
     )
     async with async_session() as session:
         user = await session.exec(
-            select(User).where(User.email == settings.FIRST_SUPERUSER)
+            select(Users).where(Users.email == settings.FIRST_SUPERUSER)
         )
         if not user.first():
             user_in = UserCreate(

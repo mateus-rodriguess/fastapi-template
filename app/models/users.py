@@ -28,7 +28,9 @@ class UserBase(SQLModel):
         index=True,
         nullable=False,
     )
-    email: EmailStr = Field(unique=True, index=True, sa_type=AutoString)
+    email: EmailStr = Field(
+        unique=True, index=True, sa_type=AutoString, nullable=False
+    )
     is_active: bool = True
     is_superuser: bool = False
     full_name: str | None = None
@@ -80,7 +82,7 @@ class Message(SQLModel):
     detail: str = "Any message"
 
 
-class User(UserBase, table=True):
+class Users(UserBase, table=True):
     password: str
     created_at: datetime = Field(default_factory=datetime.now, nullable=False)
     updated_at: Optional[datetime] = Field(
@@ -94,3 +96,4 @@ class UserAllowedFilters(SQLModel):
     uuid: Optional[uuid_pkg.UUID] = None
     sort_by: Optional[str] = "created_at"
     full_name: Optional[str] = None
+    email: Optional[EmailStr] = None

@@ -74,6 +74,10 @@ twisted = "==24.3.0"
 typing-extensions = "==4.11.0"
 uvicorn = "==0.29.0"
 "zope.interface" = "==6.3"
+fastapi-limiter = "*"
+redis = "*"
+fastapi-cache2 = {extras = ["redis"], version = "*"}
+asgi-lifespan = "*"
 
 [dev-packages]
 
