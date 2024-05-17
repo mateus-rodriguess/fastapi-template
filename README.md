@@ -19,27 +19,28 @@ The `FastAPI` template is a template repository for microservices. In this templ
 ## Technology Stack and Features
 
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
-
   - 🚀 Fast: Supports async/await syntax for routes and database connection.
   - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
   - 💪 Robust: Get production-ready code with automatic interactive documentation.
   - 🔐 Security: `OAuth2` with `fastapi.security`
+
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - ✅ [pytest](https://docs.pytest.org/en/8.0.x/) Unitary tests.
 - 🧰 [alembic](https://alembic.sqlalchemy.org/en/latest/) Database migrations.
 - 🔒 Secure password hashing by default.
 - 🔑 JWT token authentication.
-- 🚢 Deployment instructions using Docker Compose.
-- 📑 Color logger translator with `guvicorn-logger`.
-- 📑 Pagination: `fastapi-pagination` to simplify pagination.
-- 👀 pylint: Pylint analyses your code without actually running it.
+- 📑 [guvicorn-logger](https://docs.gunicorn.org/en/stable/settings.html) Color logger translator.
+- 📑 [Pagination](https://uriyyo-fastapi-pagination.netlify.app/) to simplify pagination.
+- 👀 [Pylint](https://pylint.org/) analyses your code without actually running it.
+- 🚀 [fastapi-cache](https://github.com/long2ice/fastapi-cache) Cache using [redis](https://redis.io/).
+- 🔒 [fastapi-limiter](https://github.com/long2ice/fastapi-limiter) is a rate limiting tool for fastapi routes.
 
 ### Interactive API Documentation
 
   Get production-ready code with automatic interactive documentation.
-  API documentation at [Docs](http://127.0.0.1:8000/docs)
+  API documentation at [Docs](http://0.0.0.0:8000/docs).
 
-  [![API docs](img/docs.png)](https://github.com/mateus-rodriguess/fastapi-back-end-template)
+  [![API docs](img/docs.png)](https://github.com/mateus-rodriguess/fastapi-template)
 
 ## How To Use It
 
@@ -57,7 +58,7 @@ But you can do the following:
 - Clone this repository manually, set the name with the name of the project you want to use, for example `my-back-end`:
 
   ```bash
-  git clone git@github.com:mateus-rodriguess/fastapi-back-end-template.git my-back-end
+  git clone git@github.com:mateus-rodriguess/fastapi-template.git my-back-end
   ```
 - Enter into the new directory:
 
@@ -67,12 +68,12 @@ But you can do the following:
 - Set the new origin to your new repository, copy it from the GitHub interface, for example:
 
   ```bash
-  git remote set-url origin git@github.com:mateus-rodriguess/fastapi-back-end-template.git
+  git remote set-url origin git@github.com:mateus-rodriguess/fastapi-template.git
   ```
 - Add this repo as another "remote" to allow you to get updates later:
 
   ```bash
-  git remote add upstream git@github.com:mateus-rodriguess/fastapi-back-end-template.git
+  git remote add upstream git@github.com:mateus-rodriguess/fastapi-template.git
   ```
 - Push the code to your new repository:
 
@@ -80,15 +81,20 @@ But you can do the following:
   git push -u origin main
   ```
 
+## Run:
+  ```bash
+    docker compose up -d
+  ```
+
 ## Migrations
 
-```bash
-  # Create a model in app/models
-  # Create a migration file
-  $ alembic revision --autogenerate -m "Migration message."
-  $ alembic upgrade head
+  ```bash
+    $ alembic revision --autogenerate -m "Migration message."
+    $ alembic upgrade head
 
-```
+  ```
+
+<hr>
 
 ## License
 
