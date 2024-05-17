@@ -7,10 +7,12 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlmodel import SQLModel  # Models managers
 
 from alembic import context
-from app.core.settings import get_settings  # ENVs settings
+from app.core.settings import get_settings
 
 # Model imports
-from app.models.user import User
+from app.models.users import Users
+
+Users.__dict__  # ignore
 
 settings = get_settings()
 
