@@ -5,7 +5,7 @@ router = APIRouter()
 
 
 class MensageHealth(BaseModel):
-    message: dict = {"detail": "OK"}
+    detail: str = "OK"
 
 
 @router.get(

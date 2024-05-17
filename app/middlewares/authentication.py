@@ -11,7 +11,7 @@ from starlette.responses import JSONResponse
 
 from app.core.settings import get_settings
 from app.db.connection import engine
-from app.models.user import User
+from app.models.users import Users
 
 settings = get_settings()
 
@@ -49,7 +49,7 @@ class BearerTokenAuthBackend(AuthenticationBackend):
         )
 
         async with async_session as session:
-            user = await session.get(User, decoded.get("sub"))
+            user = await session.get(Users, decoded.get("sub"))
 
         if not user:
             raise AuthenticationError(

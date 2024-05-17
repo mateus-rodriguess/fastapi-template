@@ -10,8 +10,8 @@ from sqlmodel import Session
 from app.api.api_v1.deps import CurrentUser, TokenDep, get_session
 from app.core import security
 from app.core.settings import get_settings
-from app.db.repositories.user import UserRepository
-from app.models.user import TokenResponse
+from app.db.repositories.users import UserRepository
+from app.models.users import TokenResponse
 
 router = APIRouter()
 settings = get_settings()

@@ -2,13 +2,14 @@ from typing import Any
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_cache.decorator import cache
 from sqlmodel import Session
 
-from app.api.api_v1.deps import CurrentUser, get_session
-from app.api.api_v1.service.filters_user import filters_query
+from app.api.api_v1.deps import CurrentSuperUser, CurrentUser, get_session
+from app.api.api_v1.services.filters_user import filters_query
 from app.core.security import verify_password
-from app.db.repositories.user import UserRepository
-from app.models.user import (
+from app.db.repositories.users import UserRepository
+from app.models.users import (
     Message,
     UpdatePassword,
     UserAllowedFilters,
@@ -33,7 +34,7 @@ async def create_user(
     user = await UserRepository.get_user_by_email(session, user_in.email)
     if user:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_409_CONFLICT,
             detail="The user with this email already exists in the system.",
         )
 
@@ -43,6 +44,7 @@ async def create_user(
 
 
 @router.get(path="/users", status_code=status.HTTP_200_OK)
+@cache(expire=60)
 async def get_users(
     *,
     session: Session = Depends(get_session),
@@ -59,6 +61,7 @@ async def get_users(
     status_code=status.HTTP_200_OK,
     response_model=UserPublic,
 )
+@cache(expire=60)
 async def get_user(
     *, uuid: UUID, session: Session = Depends(get_session)
 ) -> dict:
@@ -117,6 +120,7 @@ async def update_password_me(
 
 
 @router.get("/users/me", response_model=UserPublic)
+@cache(expire=60)
 def read_user_me(current_user: CurrentUser) -> Any:
     return current_user
 
@@ -127,6 +131,6 @@ def read_user_me(current_user: CurrentUser) -> Any:
     response_model=Message,
 )
 async def delete_user(
-    *, uuid: UUID, session: Session = Depends(get_session)
+    *, uuid: UUID, session: Session = Depends(get_session), _: CurrentSuperUser
 ) -> Message:
     return await UserRepository.delete_user(session, uuid)
