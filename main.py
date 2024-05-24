@@ -10,10 +10,16 @@ from app.utils.logger import logger
 
 settings = get_settings()
 ENVIRONMENT = settings.ENVIRONMENT
+VERION = settings.VERSION
+DEBUG = settings.DEBUG
+TITLE = settings.APP_NAME
+
+info_app = f"""
+    {TITLE} - VERSION: {VERION} - DEBUG: {DEBUG} - ENV: {ENVIRONMENT}
+    OpenAPI: {app.openapi_url}
+"""
 
 if __name__ == "__main__":
-    info_app = f"{app.title} - version: {app.version}"
-    info_app += f" - debug: {app.debug} - ENV: {ENVIRONMENT}"
     logger.info(info_app)
     uvicorn.run(
         "main:app",

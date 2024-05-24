@@ -19,20 +19,21 @@ The Fastapi template is a repository for microservices. In this template, you wi
 
 ## Technology Stack and Features
 
-- ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
+- ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python Back-End API.
   - 🚀 Fast: Supports async/await syntax for routes and database connection.
   - 💪 Robust: Get production-ready code with automatic interactive documentation.
-  - 🔐 Security: `OAuth2` with `fastapi.security`
+  - 🔐 Security: `OAuth2` with `fastapi.security`.
 - ⚡ Template
   - 🧰 [SQLModel](https://sqlmodel.tiangolo.com): For the Python SQL database interactions (ORM).
-  - 🐋 [Docker Compose](https://www.docker.com): For development and production.
+  - 🐋 [docker Compose](https://www.docker.com): For development and production.
   - ✅ [pytest](https://docs.pytest.org/en/8.0.x/): Unitary tests.
   - 🧰 [alembic](https://alembic.sqlalchemy.org/en/latest/): Database migrations.
   - 📑 [guvicorn-logger](https://docs.gunicorn.org/en/stable/settings.html): Color logger translator.
-  - 📑 [Pagination](https://uriyyo-fastapi-pagination.netlify.app/): To simplify pagination.
-  - 👀 [Pylint](https://pylint.org/): Analyses your code without actually running it.
+  - 📑 [pagination](https://uriyyo-fastapi-pagination.netlify.app/): To simplify pagination.
+  - 👀 [pylint](https://pylint.org/): Analyses your code without actually running it.
   - 🚀 [fastapi-cache](https://github.com/long2ice/fastapi-cache): Cache using [redis](https://redis.io/).
   - 🔒 [fastapi-limiter](https://github.com/long2ice/fastapi-limiter): Is a rate limiting tool for fastapi routes.
+  - 🚀 [nginx](https://nginx.org/en/): HTTP level server, reverse proxy.
   - 🔒 Secure password hashing by default.
   - 🔑 JWT token authentication.
 <hr>
