@@ -12,7 +12,7 @@ from app.utils.logger import logger
 
 
 async def init_data() -> None:
-    """Initializes the data for the application."""
+    """## Initializes the data for the application."""
     if not await init_db():
         logger.info("start data is already set.")
     else:
