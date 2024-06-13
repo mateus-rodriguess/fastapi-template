@@ -3,18 +3,12 @@
 # Exit in case of error
 set -e
 
-if [ $(uname -s) = "Linux" ]; then
-    echo "Remove __pycache__ files"
-    find . -type d -name __pycache__ -exec rm -r {} \+
-fi
-
-
 pipenv run alembic upgrade head
 pipenv run python initial_data.py
 
-environment_var=$(echo $ENVIRONMENT | tr -d '[:space:]')
+ENVIRONMENT=$(echo "$ENVIRONMENT" | tr -d '[:space:]')
 
-if [ "$environment_var" = "local" ]; then
+if [ "$ENVIRONMENT" = "local" ]; then
     echo "Running in local environment. Performing local actions..."
     pipenv run python main.py
 else
