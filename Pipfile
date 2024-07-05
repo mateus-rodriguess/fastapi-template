@@ -78,6 +78,7 @@ fastapi-limiter = "*"
 redis = "*"
 fastapi-cache2 = {extras = ["redis"], version = "*"}
 asgi-lifespan = "*"
+pipenv = "*"
 
 [dev-packages]
 

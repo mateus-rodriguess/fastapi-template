@@ -4,22 +4,30 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: template_fastapi
-    image: template_fastapi:latest
+    image: mateussrodriguess/template_fastapi:latest
     volumes:
       - .:/app
     restart: always
     ports:
       - 8000:8000
     environment:
-     - ENVIRONMENT=production
+      - ENVIRONMENT=production
     networks:
       - fastapi_template_network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
+
   nginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
     container_name: nginx_template_fastapi
-    image: nginx_template_fastapi:latest
+    image: mateussrodriguess/nginx_template_fastapi:latest
     ports:
       - 80:80
       - 443:443
@@ -28,6 +36,13 @@ services:
     restart: always
     networks:
       - fastapi_template_network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
 
   redis_cache:
     image: redis:latest
@@ -35,8 +50,8 @@ services:
     container_name: redis_template_fastapi
     restart: always
     ports:
-      - '6379:6379'
-    command: redis-server --maxclients 1000 --requirepass insecure!secret@KEY
+      - 6379:6379
+    command: redis-server --maxclients 10000 --requirepass insecure!secret@KEY
     depends_on:
       - template_fastapi
     networks:
@@ -46,3 +61,6 @@ networks:
   fastapi_template_network:
     driver: overlay
     attachable: true
+
+volumes:
+  redis-data:
