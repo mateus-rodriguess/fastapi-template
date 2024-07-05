@@ -2,8 +2,10 @@ import os
 from functools import cache
 from typing import Annotated, Any, Literal
 
+from dotenv import load_dotenv
 from pydantic import AnyUrl, BeforeValidator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 description = """
     Template for FastAPI application.
@@ -16,13 +18,8 @@ description_auth = """
     authenticated by AUTH EXEMPLE, with JWT token.
 """
 
-ENV = os.getenv("ENV")
-
-if ENV in ["local", "staging", "production"]:
-    ...
-else:
-    ENV = "local"
-
+load_dotenv(override=True)
+ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
 
 def parse_cors(value: Any) -> list[str] | str:
     if isinstance(value, str) and not value.startswith("["):
@@ -55,16 +52,16 @@ class Settings(BaseSettings):
     APP_NAME: str = "FastAPI Template"
     VERSION: str = "0.0.1"
     API_V1_STR: str = "/api/v1"
-    ENVIRONMENT: Literal["local", "staging", "production"] = ENV
+    ENVIRONMENT: Literal["local", "staging", "production"] = ENVIRONMENT
     DEBUG: bool = ENVIRONMENT == "local"
     DOMAIN: str = "localhost"
     DESCRIPTION: str = description
     DESCRIPTION_AUTH: str = description_auth
 
     HOST: str = "0.0.0.0"
-    BASE_URL: str = f"http://{HOST}"
     PORT: int = 8000
-
+    BASE_URL: str = f"http://{HOST}/{PORT}"
+    
     URL_ACCESS_TOKEN: str = f"{API_V1_STR}/login/access-token"
     BACKEND_CORS_ORIGINS: Annotated[
         list[AnyUrl] | str, BeforeValidator(parse_cors)
