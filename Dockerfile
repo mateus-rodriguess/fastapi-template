@@ -16,4 +16,4 @@ COPY . /app
 RUN pip install pipenv
 RUN pipenv install
 
-CMD [ "sh", "./start.sh" ]
+CMD [ "bash", "./start.sh" ]
