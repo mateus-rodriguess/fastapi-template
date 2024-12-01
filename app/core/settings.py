@@ -38,9 +38,7 @@ class Settings(BaseSettings):
         settings = get_settings()
         VERSION = settings.VERSION
     ```
-
     """
-
     model_config = SettingsConfigDict(
         env_file=".env",
         env_ignore_empty=True,
@@ -67,26 +65,23 @@ class Settings(BaseSettings):
         list[AnyUrl] | str, BeforeValidator(parse_cors)
     ] = []
 
-    SECRET_KEY: str = "insecure!717-4562-b3fc-2c963f66afa6Y"
-    JWT_ALGORITHM: str = "HS256"
-    JWT_SECRET: str = "insecure!717-4562-b3fc-2c963f66afa6"
+    SECRET_KEY: str 
+    JWT_ALGORITHM: str 
+    JWT_SECRET: str 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10 * 24 * 60  # 10 days
 
     DATABASE_URI: str = "sqlite+aiosqlite:///./sql_app.db"
 
-    REDIS_HOST: str = "redis-cache"
-    REDIS_PORT: int = 6379
-    REDIS_PASSWORD: str = "insecure!secret@KEY"
-    REDIS_URL: str = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/0"
+    REDIS_URL: str
 
-    FIRST_SUPERUSER: str = "admin@example.com"
-    FIRST_SUPERUSER_PASSWORD: str = "insecure!secret@KEY"
-    FIRST_FULL_NAME: str = "admin"
+    FIRST_SUPERUSER: str
+    FIRST_SUPERUSER_PASSWORD: str
+    FIRST_FULL_NAME: str
 
-    FIRST_SUPERUSER_TEST: str = "admin_test@example.com"
-    FIRST_SUPERUSER_PASSWORD_TEST: str = "insecure!secret@KEY2"
-    FIRST_FULL_NAME_TEST: str = "admin_test"
-    EMAIL_ANY_TEST: str = "eeezlotjpbrddoeybnvqnoipsgpsjtst@any.com"
+    FIRST_SUPERUSER_TEST: str 
+    FIRST_SUPERUSER_PASSWORD_TEST: str 
+    FIRST_FULL_NAME_TEST: str 
+    EMAIL_ANY_TEST: str
 
 
 @cache
