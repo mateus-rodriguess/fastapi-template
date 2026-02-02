@@ -1,22 +1,13 @@
-from typing import Dict
+from typing import Literal
 from uuid import UUID
 
-from fastapi import Query
-from pydantic import EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
-def filters_query(
-    uuid: UUID = Query(None, description="uuid"),
-    email: EmailStr = Query(None, description="Email", alias="email"),
-    full_name: str = Query(None, description="Full name", alias="fullName"),
-    sort_by: str = Query(
-        default="created_at", description="Sort by", alias="sortBy"
-    ),
-) -> Dict:
-
-    return {
-        "uuid": uuid,
-        "email": email,
-        "full_name": full_name,
-        "sort_by": sort_by,
-    }
+class filtersQuery(BaseModel):
+    uuid: UUID = None
+    email: EmailStr = None
+    # full_name: str | None = Field(None,  alias="fullName"),
+    sort_by: Literal["created_at", "updated_at"] = "created_at"
+    page: int = Field(1)
+    page_size: int = Field(100, gt=0, le=100, alias="pageSize")

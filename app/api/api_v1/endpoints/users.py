@@ -1,23 +1,20 @@
-from typing import Any
+from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi_cache.decorator import cache
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlmodel import Session
 
 from app.api.api_v1.deps import CurrentSuperUser, CurrentUser, get_session
-from app.api.api_v1.services.filters_user import filters_query
+from app.api.api_v1.services.filters_user import filtersQuery
 from app.core.security import verify_password
 from app.db.repositories.users import UserRepository
 from app.models.users import (
     Message,
     UpdatePassword,
-    UserAllowedFilters,
     UserPublic,
     UserRegister,
     UserUpdate,
 )
-from app.utils.custom_pagination import PageParams
 
 router = APIRouter()
 router_unauthenticated = APIRouter()
@@ -38,22 +35,19 @@ async def create_user(
             detail="The user with this email already exists in the system.",
         )
 
-    return await UserRepository.create_user(
-        session=session, user_create=user_in
-    )
+    return await UserRepository.create_user(session=session, user_create=user_in)
 
 
 @router.get(path="/users", status_code=status.HTTP_200_OK)
-@cache(expire=60)
 async def get_users(
     *,
     session: Session = Depends(get_session),
-    filters: dict = Depends(filters_query)
-) -> PageParams[UserPublic]:
-    params = UserAllowedFilters(**filters).model_dump(exclude_none=True)
-    return await UserRepository.get_all_users(
-        session, sort_by=params.pop("sort_by"), filters=params
+    filters: Annotated[filtersQuery, Query()],
+):
+    result = await UserRepository.get_all_users(
+        session, sort_by=filters.sort_by, filters=filters
     )
+    return {"page": filters.page, "pageSize": filters.page_size, "items": result}
 
 
 @router.get(
@@ -61,15 +55,10 @@ async def get_users(
     status_code=status.HTTP_200_OK,
     response_model=UserPublic,
 )
-@cache(expire=60)
-async def get_user(
-    *, uuid: UUID, session: Session = Depends(get_session)
-) -> dict:
+async def get_user(*, uuid: UUID, session: Session = Depends(get_session)) -> dict:
     data = await UserRepository.get_user_by_uuid(session, uuid)
     if not data:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Not found."
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found.")
     return data
 
 
@@ -82,7 +71,7 @@ async def update_user_me(
     *,
     user_in: UserUpdate,
     current_user: CurrentUser,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
 ) -> dict:
     if user_in.email:
         existing_user = await UserRepository.get_user_by_email(
@@ -101,7 +90,7 @@ async def update_password_me(
     *,
     body: UpdatePassword,
     current_user: CurrentUser,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
 ) -> Message:
     if not verify_password(body.current_password, current_user.password):
         raise HTTPException(
@@ -120,7 +109,6 @@ async def update_password_me(
 
 
 @router.get("/users/me", response_model=UserPublic)
-@cache(expire=60)
 def read_user_me(current_user: CurrentUser) -> Any:
     return current_user
 

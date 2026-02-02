@@ -1,7 +1,7 @@
-from asgi_correlation_id import CorrelationIdMiddleware
+import logging
+
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
-from fastapi_pagination import add_pagination
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
@@ -18,7 +18,11 @@ from app.middlewares.exception_handler import (
 )
 from app.middlewares.utils_header import header_utils
 from app.utils.indentifier import custom_generate_unique_id
+from app.utils.logging_config import setup_logging
 
+setup_logging(log_level="DEBUG")
+
+logger = logging.getLogger(__name__)
 settings = get_settings()
 
 APP_NAME = settings.APP_NAME
@@ -54,11 +58,6 @@ app.add_middleware(
     on_error=on_auth_error,
 )
 
-app.add_exception_handler(
-    RequestValidationError, validate_error_exception_handler
-)
+app.add_exception_handler(RequestValidationError, validate_error_exception_handler)
 app.middleware("http")(header_utils)
-app.add_middleware(CorrelationIdMiddleware)
 app.include_router(router=api_router)
-
-add_pagination(app)

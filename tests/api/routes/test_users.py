@@ -1,10 +1,10 @@
 import pytest
 from fastapi import status
 from httpx import AsyncClient
+from tests.utils.users import user_date_create_any
+from tests.utils.utils import random_lower_string, random_password
 
 from app.core.settings import get_settings
-from app.tests.utils.users import user_date_create_any
-from app.tests.utils.utils import random_lower_string, random_password
 
 settings = get_settings()
 url_users: str = f"{settings.API_V1_STR}/users"
@@ -14,7 +14,6 @@ url_users: str = f"{settings.API_V1_STR}/users"
 async def test_user_create(
     client: AsyncClient, superuser_headers: dict[str, str]
 ) -> None:
-
     response = await client.post(url_users, json=user_date_create_any)
     data = response.json()
 
@@ -44,9 +43,7 @@ async def test_user_not_authenticated(client: AsyncClient) -> None:
 
 
 @pytest.mark.anyio
-async def test_get_all_users(
-    client: AsyncClient, headers: dict[str, str]
-) -> None:
+async def test_get_all_users(client: AsyncClient, headers: dict[str, str]) -> None:
     response = await client.get(url_users, headers=headers)
     data = response.json()
     assert response.status_code == status.HTTP_200_OK
@@ -69,9 +66,7 @@ async def test_get_user(client: AsyncClient, headers: dict[str, str]) -> None:
 
 
 @pytest.mark.anyio
-async def test_get_user_not_found(
-    client: AsyncClient, headers: dict[str, str]
-) -> None:
+async def test_get_user_not_found(client: AsyncClient, headers: dict[str, str]) -> None:
     uuid_any: str = "248ac98f-552e-4b33-aa66-c36e6024cec3"
     response = await client.get(f"{url_users}/{uuid_any}", headers=headers)
 
@@ -93,16 +88,11 @@ async def test_create_user_exists(client: AsyncClient):
     }
 
 
-async def test_delete_user_error(
-    client: AsyncClient, headers: dict[str, str]
-) -> None:
-
+async def test_delete_user_error(client: AsyncClient, headers: dict[str, str]) -> None:
     data = await client.get(url_users, headers=headers)
     uuid = data.json()["items"][0]["uuid"]
 
     response = await client.delete(f"{url_users}/{uuid}", headers=headers)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.json() == {
-        "detail": "The user doesn't have enough privileges."
-    }
+    assert response.json() == {"detail": "The user doesn't have enough privileges."}

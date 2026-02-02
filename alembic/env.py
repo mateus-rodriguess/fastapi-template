@@ -1,29 +1,28 @@
 import asyncio
-from logging.config import fileConfig
+import os
 
+from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlmodel import SQLModel  # Models managers
+from sqlmodel import SQLModel
 
-from alembic import context
 from app.core.settings import get_settings
-
-# Model imports
-from app.models.users import Users
-
-Users.__dict__  # ignore
+from app.models.users import Users  # noqa: F401
 
 settings = get_settings()
 
-DATABASE_URI = settings.DATABASE_URI
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL not set")
 
 config = context.config
 
-if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
 
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 target_metadata = SQLModel.metadata
 
@@ -40,10 +39,8 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = DATABASE_URI
-
     context.configure(
-        url=url,
+        url=DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -54,11 +51,17 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata)
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+    )
 
     with context.begin_transaction():
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,
         )
         context.run_migrations()
 
@@ -69,7 +72,6 @@ async def run_async_migrations() -> None:
 
     """
     config_section = config.get_section(config.config_ini_section)
-    config_section["sqlalchemy.url"] = DATABASE_URI
 
     connectable = AsyncEngine(
         engine_from_config(

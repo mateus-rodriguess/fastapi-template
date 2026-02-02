@@ -11,13 +11,11 @@ from app.models.users import UserCreate, Users
 
 settings = get_settings()
 
-engine = AsyncEngine(create_engine(settings.DATABASE_URI, future=True))
+engine = AsyncEngine(create_engine(settings.DATABASE_URL, future=True))
 
 
 async def init_db() -> Any:
-    async_session = sessionmaker(
-        engine, class_=AsyncSession, expire_on_commit=False
-    )
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         user = await session.exec(
             select(Users).where(Users.email == settings.FIRST_SUPERUSER)

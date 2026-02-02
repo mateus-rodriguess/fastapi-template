@@ -1,4 +1,5 @@
 from math import ceil
+from typing import Any
 
 from fastapi import HTTPException, Request, Response, status
 from fastapi.encoders import jsonable_encoder
@@ -7,13 +8,13 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
 from app.core.settings import get_settings
-from app.utils.logger import logger
+from app.utils.logging_config import logger
 
 settings = get_settings()
 
 
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next) -> Any:
         if settings.DEBUG:
             return await call_next(request)
         try:
@@ -26,19 +27,14 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
             )
 
 
-async def validate_error_exception_handler(
-    _: Request, exc: RequestValidationError
-):
+async def validate_error_exception_handler(_: Request, exc: RequestValidationError):
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content=jsonable_encoder({"detail": exc.errors(), "body": exc.body}),
     )
 
 
-async def limit_request_callback(
-    request: Request, _: Response, pexpire: int
-) -> None:
-
+async def limit_request_callback(request: Request, _: Response, pexpire: int) -> None:
     expire = ceil(pexpire / 1000)
     forwarded = request.headers.get("X-Forwarded-For")
     if forwarded:

@@ -2,15 +2,15 @@ import pytest
 from fastapi import status
 from httpx import AsyncClient
 from sqlmodel import Session
-
-from app.core.settings import get_settings
-from app.db.repositories.users import UserRepository
-from app.models.users import UserCreate, Users, UserUpdate
-from app.tests.utils.utils import (
+from tests.utils.utils import (
     random_email,
     random_lower_string,
     random_password,
 )
+
+from app.core.settings import get_settings
+from app.db.repositories.users import UserRepository
+from app.models.users import UserCreate, Users, UserUpdate
 
 settings = get_settings()
 
@@ -33,13 +33,12 @@ def check_status_code(resposne_status: int, status: int) -> None:
 
 
 async def get_superuser_token_headers(client: AsyncClient) -> dict[str, str]:
-
     response = await client.post(url=url_token, data=data_super_user)
     with pytest.raises(Exception):
         assert check_status_code(response.status_code, status.HTTP_200_OK)
 
     data: dict = response.json()
-    access_token: str | None = data.get("access_token", None)
+    access_token: str | None = data.get("access_token")
     return {"Authorization": f"Bearer {access_token}"}
 
 
@@ -51,7 +50,7 @@ async def user_authentication_headers(
     with pytest.raises(Exception):
         assert check_status_code(response.status_code, status.HTTP_200_OK)
     data: dict = response.json()
-    access_token = data.get("access_token", None)
+    access_token = data.get("access_token")
     return {"Authorization": f"Bearer {access_token}"}
 
 

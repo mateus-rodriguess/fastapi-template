@@ -1,5 +1,4 @@
 import pytest
-from asgi_lifespan import LifespanManager
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import Session, select
@@ -10,7 +9,7 @@ from app.core.settings import get_settings
 from app.db.connection import engine
 from app.db.repositories.users import UserRepository
 from app.models.users import UserCreate, Users
-from app.tests.utils.users import (
+from tests.utils.users import (
     authentication_token_email,
     get_superuser_token_headers,
 )
@@ -35,9 +34,7 @@ async def create_super_user_test(session: Session) -> None:
             is_active=True,
             full_name=settings.FIRST_FULL_NAME_TEST,
         )
-        return await UserRepository.create_user(
-            session=session, user_create=user_in
-        )
+        return await UserRepository.create_user(session=session, user_create=user_in)
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -52,11 +49,12 @@ async def session() -> AsyncSession:  # type: ignore
 
 @pytest.fixture(scope="session")
 async def client():
-    async with LifespanManager(app):
-        async with AsyncClient(
+    async with (
+        AsyncClient(
             transport=ASGITransport(app=app), base_url=settings.BASE_URL
-        ) as client:
-            yield client
+        ) as client,
+    ):
+        yield client
 
 
 @pytest.fixture(scope="session")
@@ -67,6 +65,4 @@ async def superuser_headers(client: AsyncClient) -> dict[str, str]:
 @pytest.fixture(scope="session")
 async def headers(client: AsyncClient, session: Session) -> dict[str, str]:
     email = settings.EMAIL_ANY_TEST
-    return await authentication_token_email(
-        client=client, session=session, email=email
-    )
+    return await authentication_token_email(client=client, session=session, email=email)

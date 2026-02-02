@@ -1,23 +1,24 @@
 from uuid import UUID
 
 from fastapi import HTTPException, status
-from fastapi_pagination.ext.sqlmodel import paginate
 from sqlmodel import Session, select
 
+from app.api.api_v1.services.filters_user import filtersQuery
 from app.core.security import get_password_hash, verify_password
 from app.models.users import Message, UserPublic, Users, UserUpdate
-from app.utils.custom_pagination import PageParams
 
 
 class UserRepository:
-
     @classmethod
     async def get_all_users(
-        cls, session: Session, sort_by: str = "created_at", filters: dict = ""
-    ) -> PageParams[UserPublic]:
-        return await paginate(
-            session, select(Users).filter_by(**filters).order_by(sort_by)
+        cls, session: Session, sort_by: str = "created_at", filters: filtersQuery = None
+    ):
+        offset = (filters.page - 1) * filters.page_size
+        statement = (
+            select(Users).order_by(sort_by).offset(offset).limit(filters.page_size)
         )
+        results = await session.exec(statement)
+        return results.all()
 
     @classmethod
     async def create_user(cls, session: Session, user_create: dict):
@@ -34,7 +35,6 @@ class UserRepository:
     async def update_user_me(
         cls, session: Session, current_user: Users, user_in: UserUpdate
     ) -> UserPublic:
-
         user_data = user_in.model_dump(exclude_unset=True)
         extra_data = {}
         if "password" in user_data:
@@ -49,21 +49,13 @@ class UserRepository:
         return current_user
 
     @classmethod
-    async def get_user_by_email(
-        cls, session: Session, email: str
-    ) -> UserPublic | None:
-        session_user = await session.exec(
-            select(Users).where(Users.email == email)
-        )
+    async def get_user_by_email(cls, session: Session, email: str) -> UserPublic | None:
+        session_user = await session.exec(select(Users).where(Users.email == email))
         return session_user.first()
 
     @classmethod
-    async def get_user_by_uuid(
-        cls, session: Session, uuid: UUID
-    ) -> UserPublic | None:
-        session_user = await session.exec(
-            select(Users).where(Users.uuid == uuid)
-        )
+    async def get_user_by_uuid(cls, session: Session, uuid: UUID) -> UserPublic | None:
+        session_user = await session.exec(select(Users).where(Users.uuid == uuid))
         return session_user.first()
 
     @classmethod

@@ -19,25 +19,21 @@ The Fastapi template is a repository for microservices. In this template, you wi
   - 🔐 Security: `OAuth2` with `fastapi.security`.
 - ⚡ Template
   - 🧰 [SQLModel](https://sqlmodel.tiangolo.com): For the Python SQL database interactions (ORM).
-  - 🐋 [docker Compose](https://www.docker.com): For development and production.
   - ✅ [pytest](https://docs.pytest.org/en/8.0.x/): Unitary tests.
   - 🧰 [alembic](https://alembic.sqlalchemy.org/en/latest/): Database migrations.
-  - 📑 [guvicorn-logger](https://docs.gunicorn.org/en/stable/settings.html): Color logger translator.
   - 📑 [pagination](https://uriyyo-fastapi-pagination.netlify.app/): To simplify pagination.
-  - 👀 [pylint](https://pylint.org/): Analyses your code without actually running it.
   - 🚀 [fastapi-cache](https://github.com/long2ice/fastapi-cache): Cache using [redis](https://redis.io/).
   - 🔒 [fastapi-limiter](https://github.com/long2ice/fastapi-limiter): Is a rate limiting tool for fastapi routes.
-  - 🚀 [nginx](https://nginx.org/en/): HTTP level server, reverse proxy.
   - 🔒 Secure password hashing by default.
   - 🔑 JWT token authentication.
-<hr>
+  <hr>
 
 ### Interactive API Documentation
 
-  Get production-ready code with automatic interactive documentation.
-  API documentation at [Docs](http://0.0.0.0:8000/docs).
+Get production-ready code with automatic interactive documentation.
+API documentation at [Docs](http://0.0.0.0:8000/docs).
 
-  [![API docs](img/docs.png)](https://github.com/mateus-rodriguess/fastapi-template)
+[![API docs](img/docs.png)](https://github.com/mateus-rodriguess/fastapi-template)
 
 ## How To Use It
 
@@ -57,21 +53,25 @@ But you can do the following:
   ```bash
   git clone git@github.com:mateus-rodriguess/fastapi-template.git my-back-end
   ```
+
 - Enter into the new directory:
 
   ```bash
   cd my-back-end
   ```
+
 - Set the new origin to your new repository, copy it from the GitHub interface, for example:
 
   ```bash
   git remote set-url origin git@github.com:mateus-rodriguess/fastapi-template.git
   ```
+
 - Add this repo as another "remote" to allow you to get updates later:
 
   ```bash
   git remote add upstream git@github.com:mateus-rodriguess/fastapi-template.git
   ```
+
 - Push the code to your new repository:
 
   ```bash
@@ -79,17 +79,18 @@ But you can do the following:
   ```
 
 ## Run:
-  ```bash
-    docker compose up -d
-  ```
+
+```bash
+  docker compose up -d
+```
 
 ## Migrations
 
-  ```bash
-    $ alembic revision --autogenerate -m "Migration message."
-    $ alembic upgrade head
+```bash
+  $ alembic revision --autogenerate -m "Migration message."
+  $ alembic upgrade head
 
-  ```
+```
 
 <hr>
 

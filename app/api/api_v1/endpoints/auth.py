@@ -38,9 +38,7 @@ async def login_access_token(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user."
         )
 
-    access_token_expires = timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-    )
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return TokenResponse(
         access_token=security.create_access_token(
             user.uuid, expires_delta=access_token_expires
@@ -56,9 +54,7 @@ async def login_access_token(
 async def refresh_access_token(
     current_user: CurrentUser, token: TokenDep
 ) -> TokenResponse:
-    access_token_expires = timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-    )
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
     try:
         payload: dict = security.verify_refresh_token(token)

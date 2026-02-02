@@ -22,9 +22,7 @@ def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
 
 
 def verify_refresh_token(token: str) -> dict:
-    return jwt.decode(
-        token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM]
-    )
+    return jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

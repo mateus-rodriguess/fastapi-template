@@ -23,10 +23,7 @@ port = os.getenv("PORT", "8000")
 bind_env = os.getenv("BIND", None)
 use_loglevel = os.getenv("LOG_LEVEL", "info")
 
-if bind_env:
-    use_bind = bind_env
-else:
-    use_bind = f"{host}:{port}"
+use_bind = bind_env or f"{host}:{port}"
 
 cores = multiprocessing.cpu_count()
 workers_per_core = float(workers_per_core_str)

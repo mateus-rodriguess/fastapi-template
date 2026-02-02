@@ -6,7 +6,7 @@ import uvicorn
 
 from app.app import app
 from app.core.settings import get_settings
-from app.utils.logger import logger
+from app.utils.logging_config import logger
 
 settings = get_settings()
 ENVIRONMENT = settings.ENVIRONMENT

@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from pydantic import AnyUrl, BeforeValidator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 description = """
     Template for FastAPI application.
     Nested template, contains examples of how to create a robust
@@ -20,6 +19,7 @@ description_auth = """
 
 load_dotenv(override=True)
 ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+
 
 def parse_cors(value: Any) -> list[str] | str:
     if isinstance(value, str) and not value.startswith("["):
@@ -39,6 +39,7 @@ class Settings(BaseSettings):
         VERSION = settings.VERSION
     ```
     """
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_ignore_empty=True,
@@ -59,18 +60,18 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     BASE_URL: str = f"http://{HOST}/{PORT}"
-    
+
     URL_ACCESS_TOKEN: str = f"{API_V1_STR}/login/access-token"
     BACKEND_CORS_ORIGINS: Annotated[
         list[AnyUrl] | str, BeforeValidator(parse_cors)
     ] = []
 
-    SECRET_KEY: str 
-    JWT_ALGORITHM: str 
-    JWT_SECRET: str 
+    SECRET_KEY: str
+    JWT_ALGORITHM: str
+    JWT_SECRET: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10 * 24 * 60  # 10 days
 
-    DATABASE_URI: str = "sqlite+aiosqlite:///./sql_app.db"
+    DATABASE_URL: str = "sqlite+aiosqlite:///./sql_app.db"
 
     REDIS_URL: str
 
@@ -78,9 +79,9 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
     FIRST_FULL_NAME: str
 
-    FIRST_SUPERUSER_TEST: str 
-    FIRST_SUPERUSER_PASSWORD_TEST: str 
-    FIRST_FULL_NAME_TEST: str 
+    FIRST_SUPERUSER_TEST: str
+    FIRST_SUPERUSER_PASSWORD_TEST: str
+    FIRST_FULL_NAME_TEST: str
     EMAIL_ANY_TEST: str
 
 

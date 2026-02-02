@@ -1,7 +1,6 @@
 import re
 import uuid as uuid_pkg
 from datetime import datetime
-from typing import Optional
 
 from pydantic import EmailStr, field_validator
 from sqlmodel import AutoString, Field, SQLModel
@@ -11,13 +10,9 @@ def validate_password(value: str) -> str:
     if len(value) < 8:
         raise ValueError("Password must be at least 6 characters long.")
     if not re.search(r"\W", value):
-        raise ValueError(
-            "Password must contain at least one special character."
-        )
+        raise ValueError("Password must contain at least one special character.")
     if not re.search(r"[A-Z]", value):
-        raise ValueError(
-            "Password must contain at least one uppercase letter."
-        )
+        raise ValueError("Password must contain at least one uppercase letter.")
     return value
 
 
@@ -28,9 +23,7 @@ class UserBase(SQLModel):
         index=True,
         nullable=False,
     )
-    email: EmailStr = Field(
-        unique=True, index=True, sa_type=AutoString, nullable=False
-    )
+    email: EmailStr = Field(unique=True, index=True, sa_type=AutoString, nullable=False)
     is_active: bool = True
     is_superuser: bool = False
     full_name: str | None = None
@@ -85,7 +78,7 @@ class Message(SQLModel):
 class Users(UserBase, table=True):
     password: str
     created_at: datetime = Field(default_factory=datetime.now, nullable=False)
-    updated_at: Optional[datetime] = Field(
+    updated_at: datetime | None = Field(
         default_factory=datetime.now,
         sa_column_kwargs={"onupdate": datetime.now},
         nullable=False,
@@ -93,7 +86,7 @@ class Users(UserBase, table=True):
 
 
 class UserAllowedFilters(SQLModel):
-    uuid: Optional[uuid_pkg.UUID] = None
-    sort_by: Optional[str] = "created_at"
-    full_name: Optional[str] = None
-    email: Optional[EmailStr] = None
+    uuid: uuid_pkg.UUID | None = None
+    sort_by: str | None = "created_at"
+    full_name: str | None = None
+    email: EmailStr | None = None

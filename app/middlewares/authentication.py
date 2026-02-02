@@ -24,7 +24,6 @@ def on_auth_error(_: Request, exc: Exception):
 
 
 class BearerTokenAuthBackend(AuthenticationBackend):
-
     async def authenticate(self, conn):
         if "Authorization" not in conn.headers:
             return
@@ -44,20 +43,14 @@ class BearerTokenAuthBackend(AuthenticationBackend):
         except (ValueError, UnicodeDecodeError, JWTError) as exeption:
             raise AuthenticationError("Invalid JWT Token.") from exeption
 
-        async_session = AsyncSession(
-            engine, expire_on_commit=False, autoflush=False
-        )
+        async_session = AsyncSession(engine, expire_on_commit=False, autoflush=False)
 
         async with async_session as session:
             user = await session.get(Users, decoded.get("sub"))
 
         if not user:
-            raise AuthenticationError(
-                "User not found.", status.HTTP_404_NOT_FOUND
-            )
+            raise AuthenticationError("User not found.", status.HTTP_404_NOT_FOUND)
         if not user.is_active:
-            raise AuthenticationError(
-                "Inactive user.", status.HTTP_400_BAD_REQUEST
-            )
+            raise AuthenticationError("Inactive user.", status.HTTP_400_BAD_REQUEST)
 
         return AuthCredentials(["authenticated"]), user.email
